@@ -43,6 +43,19 @@ for i in range(len(inpf)):
         jumpchar -= 1
         continue
 
+    if inpf[i:i+len('for')] == 'for':
+        for e in inpf[i:len(inpf)]:
+            if e == '{':
+                outf.write(e)
+                break
+            else:
+                jumpchar += 1
+                outf.write(e)
+        outf.write('\n')
+        tabs += 1
+        MakeTabs(tabs)
+        continue
+
     if inpf[i:i+len('}:function(){};')] == '}:function(){};':
         outf.write('\n')
         tabs -= 1
