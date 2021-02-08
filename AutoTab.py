@@ -44,16 +44,21 @@ for i in range(len(inpf)):
         continue
 
     if inpf[i:i+len('for')] == 'for':
+        parenlevel = 0
         for e in inpf[i:len(inpf)]:
-            if e == '{':
-                outf.write(e)
+            if e == '(':
                 break
-            else:
-                jumpchar += 1
-                outf.write(e)
-        outf.write('\n')
-        tabs += 1
-        MakeTabs(tabs)
+            jumpchar += 1
+            outf.write(e)
+        for e in inpf[i+jumpchar:len(inpf)]:
+            if e == '(':
+                parenlevel += 1
+            elif e == ')':
+                parenlevel -= 1
+            outf.write(e)
+            if parenlevel <= 0:
+                break
+            jumpchar += 1
         continue
 
     if inpf[i:i+len('}:function(){};')] == '}:function(){};':
